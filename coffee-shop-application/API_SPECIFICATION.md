@@ -4,7 +4,7 @@
 This document provides a specification for the Coffee Shop API, including endpoints, request/response formats, and business rules.
 
 ## Base URL
-All API endpoints are prefixed with `/api/v1`.
+All API endpoints are prefixed with `/api/`.
 
 ## Authentication
 Authentication is required for all endpoints. The API uses JWT tokens for authentication.

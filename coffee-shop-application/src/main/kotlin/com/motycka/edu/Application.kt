@@ -21,6 +21,11 @@ import io.ktor.server.netty.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.json.Json
+import com.motycka.edu.order.OrderRepositoryImpl
+import com.motycka.edu.order.OrderItemRepositoryImpl
+import com.motycka.edu.order.OrderService
+import com.motycka.edu.menu.InternalMenuService
+import com.motycka.edu.order.orderRoutes
 
 private val logger = KotlinLogging.logger {}
 
@@ -51,6 +56,11 @@ fun main() {
             jwtService = jwtGenerator
         )
 
+        val orderRepository = OrderRepositoryImpl()
+        val orderItemRepository = OrderItemRepositoryImpl()
+        val internalMenuService = InternalMenuService(menuRepository)
+        val orderService = OrderService(orderRepository, orderItemRepository, internalMenuService)
+
         install(ContentNegotiation) {
             json(Json {
                 prettyPrint = true
@@ -68,6 +78,8 @@ fun main() {
             authenticate(AUTH_JWT) {
                 menuRoutes(menuService, API_PATH)
                 // add order routes
+                orderRoutes(orderService, API_PATH)
+
             }
         }
     }.start(wait = true)
